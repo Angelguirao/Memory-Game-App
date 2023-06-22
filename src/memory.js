@@ -8,15 +8,12 @@ class MemoryGame {
 
 
   shuffleCards() {
-
+    
     if (!this.cards) {
       return undefined;
     }
-
-    for (let i = this.cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
-    }
+  
+    this.cards.sort(() => Math.random() - 0.5);
   }
 
   checkIfPair(card1, card2) {

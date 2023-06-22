@@ -49,15 +49,14 @@ window.addEventListener('load', (event) => {
         memoryGame.pickedCards.push(card);
   
         if (memoryGame.pickedCards.length === 2) {
-          const [card1, card2] = memoryGame.pickedCards;
-          const cardName1 = card1.dataset.cardName;
-          const cardName2 = card2.dataset.cardName;
+          const card1 = memoryGame.pickedCards[0];
+          const card2 = memoryGame.pickedCards[1];
+          const isPair = memoryGame.checkIfPair(card1.name, card2.name);
 
-          if (memoryGame.checkIfPair(cardName1, cardName2)) {
+          if (isPair) {
             card1.classList.add('blocked');
             card2.classList.add('blocked');
           } else {
-            
             setTimeout(() => {
               card1.classList.toggle('turned');
               card2.classList.toggle('turned');
