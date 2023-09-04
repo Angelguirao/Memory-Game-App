@@ -1,5 +1,3 @@
-Memory Game App
-
 <br>
 
 ![Memory Game Board](https://i.imgur.com/H6GLZGQ.jpg)
