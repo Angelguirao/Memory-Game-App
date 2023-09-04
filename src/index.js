@@ -27,6 +27,10 @@ const cards = [
 
 const memoryGame = new MemoryGame(cards);
 
+function toggle(element, classes) {
+  classes.forEach(className => element.classList.toggle(className));
+}
+
 window.addEventListener('load', (event) => {
   let html = '';
   memoryGame.cards.forEach((pic) => {
@@ -41,35 +45,57 @@ window.addEventListener('load', (event) => {
   // Add all the divs to the HTML
   document.querySelector('#memory-board').innerHTML = html;
 
+  function toggle(element, classes) {
+    classes.forEach(className => element.classList.toggle(className));
+  }
+
   // Bind the click event of each element to a function
   document.querySelectorAll('.card').forEach((card) => {
     card.addEventListener('click', () => {
-      if (memoryGame.pickedCards.length < 2) {
-        card.classList.toggle('turned');
-        memoryGame.pickedCards.push(card);
-  
-        if (memoryGame.pickedCards.length === 2) {
-          const card1 = memoryGame.pickedCards[0];
-          const card2 = memoryGame.pickedCards[1];
-          const isPair = memoryGame.checkIfPair(card1.name, card2.name);
+      // TODO: write some code here
+     const clicked = document.getElementById("pairs_clicked");
+     const guessed = document.getElementById("pairs_guessed");
 
-          if (isPair) {
-            card1.classList.add('blocked');
-            card2.classList.add('blocked');
-          } else {
-            setTimeout(() => {
-              card1.classList.toggle('turned');
-              card2.classList.toggle('turned');
-            }, 1000);
-          }
+     console.log("Card clicked: ", card);
+     toggle(card.children[0], ["back", "front"]);
+     toggle(card.children[1], ["back", "front"]);
 
-          memoryGame.pickedCards = [];
+     memoryGame.pickedCards.push(card);
+     // console.log(memoryGame.pickedCards);
+     if (memoryGame.pickedCards.length === 2) {
+       const firstInPair = memoryGame.pickedCards[0];
+       const secondInPair = memoryGame.pickedCards[1];
+       const cardName1 = firstInPair.getAttribute("data-card-name");
+       const cardName2 = secondInPair.getAttribute("data-card-name");
+       // console.log(cardName1, cardName2);
 
-          if (memoryGame.checkIfFinished()) {
-            alert('You won!');
-          }
+       if (memoryGame.checkIfPair(cardName1, cardName2)) {
+         firstInPair.children[1].classList.add("blocked");
+         secondInPair.children[1].classList.add("blocked");
+         memoryGame.pickedCards = [];
+
+        if (memoryGame.checkIfFinished()) {
+          document.querySelector("#memory-board").innerHTML = "";
+          let h1 = document.createElement("h1");
+          h1.style.color = "pink";
+          h1.innerHTML = "YOU WON!!!";
+          document.querySelector("#memory-board").appendChild(h1);
         }
-      }
+
+       } else {
+         setTimeout(() => {
+           toggle(firstInPair.children[0], ["back", "front"]);
+           toggle(firstInPair.children[1], ["back", "front"]);
+           toggle(secondInPair.children[0], ["back", "front"]);
+           toggle(secondInPair.children[1], ["back", "front"]);
+         }, 1000);
+         memoryGame.pickedCards = [];
+       }
+       clicked.innerHTML = memoryGame.pairsClicked;
+       guessed.innerHTML = memoryGame.pairsGuessed;
+     }
+
     });
   });
+  
 });
